@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4月25日(土) ビールリスト</title>
+    <style>
+        /* Base Styles (PC First) */
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            font-size: 14px;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 1.5em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .copy-note {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* PC Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            table-layout: fixed;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            vertical-align: middle;
+            box-sizing: border-box;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        /* PC Column Widths */
+        .pc-only-width th:nth-child(1) { width: 40px; text-align: center; } /* No */
+        .pc-only-width th:nth-child(2) { width: 150px; } /* Brewery */
+        .pc-only-width th:nth-child(3) { width: 180px; } /* Beer Name */
+        .pc-only-width th:nth-child(4) { width: 100px; } /* Region */
+        .pc-only-width th:nth-child(5) { width: 140px; } /* Style */
+        .pc-only-width th:nth-child(6) { width: 70px; } /* ABV */
+        .pc-only-width th:nth-child(7) { width: 60px; } /* Vol */
+        .pc-only-width th:nth-child(8) { width: auto; } /* Desc */
+        .pc-only-width th:nth-child(9) { width: 120px; text-align: center; } /* Image */
+
+        .no-col { text-align: center; }
+        .brewery-col { font-weight: bold; color: #444; }
+        .name-col { font-weight: bold; color: #000; font-size: 1.05em; }
+        .region-col { color: #2c3e50; font-weight: 500; font-size: 0.9em; }
+        .style-col { font-style: italic; color: #555; font-size: 0.9em; }
+        .abv-col { text-align: right; white-space: nowrap; font-weight: bold; color: #d35400;}
+        .vol-col { white-space: nowrap; }
+        .desc-col { font-size: 0.9em; line-height: 1.5; }
+        
+        .img-cell {
+            text-align: center;
+            padding: 5px;
+        }
+        .beer-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eee;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            background-color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        .beer-img:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .modal-content {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease;
+        }
+        .modal-caption {
+            margin-top: 15px;
+            color: #fff;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.8); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        /* Smartphone Styles */
+        @media screen and (max-width: 768px) {
+            body { padding: 10px; background-color: #f0f2f5; }
+            .container { padding: 0; background: transparent; box-shadow: none; }
+            h1 { font-size: 1.4em; text-align: center; border: none; margin-bottom: 15px; color: #222; }
+            
+            table, thead, tbody, th, td, tr { display: block; width: 100%; }
+            thead { display: none; }
+            
+            tr {
+                background: #fff;
+                margin-bottom: 20px;
+                border-radius: 12px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+                overflow: hidden;
+                position: relative;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+            }
+
+            td { border: none; padding: 0; }
+
+            .no-col {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: #333;
+                color: #fff;
+                font-size: 0.75em;
+                padding: 4px 12px;
+                z-index: 10;
+                border-bottom-right-radius: 8px;
+                font-weight: bold;
+                width: auto;
+            }
+
+            .img-cell { width: 110px; height: 110px; order: 1; padding: 0; flex-shrink: 0; }
+            .beer-img { width: 100%; height: 100%; border-radius: 0; }
+
+            .name-col { order: 2; width: calc(100% - 110px); padding: 12px 10px 2px 10px; line-height: 1.3; }
+            .brewery-col { order: 3; width: calc(100% - 110px); padding: 2px 10px 10px 10px; font-size: 0.8em; color: #666; border-bottom: 1px solid #f0f0f0; }
+
+            .region-col, .style-col, .abv-col, .vol-col { font-size: 0.85em; padding: 8px 15px; display: flex; align-items: center; color: #444; }
+            .region-col::before { content: "地域:"; color: #999; margin-right: 6px; }
+            .style-col::before { content: "Style:"; color: #999; margin-right: 6px; }
+            .abv-col::before { content: "ABV:"; color: #999; margin-right: 6px; }
+            .vol-col::before { content: "Vol:"; color: #999; margin-right: 6px; }
+
+            .region-col { order: 4; width: 50%; border-right: 1px solid #f5f5f5; }
+            .vol-col    { order: 5; width: 50%; }
+            .style-col  { order: 6; width: 100%; border-top: 1px solid #f5f5f5; }
+            .abv-col    { order: 7; width: 100%; border-top: 1px solid #f5f5f5; background-color: #fffaf0; }
+            
+            .desc-col { order: 8; width: 100%; background-color: #f9fafb; padding: 12px 15px; border-top: 1px solid #eee; }
+            .close { top: 10px; right: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>4月25日(土) ビールリスト</h1>
+    <p class="copy-note" style="margin-bottom:20px;">公式情報に基づきビアスタイルとABVを厳密に修正し、度数の低い順に並べています。（画像をタップで拡大）</p>
+    
+    <table>
+        <thead class="pc-only-width">
+            <tr>
+                <th>No</th>
+                <th>醸造所</th>
+                <th>商品名</th>
+                <th>国・地域</th>
+                <th>スタイル</th>
+                <th>ABV</th>
+                <th>容量</th>
+                <th>特徴・解説</th>
+                <th>画像</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="no-col">1</td>
+                <td class="brewery-col">Nude Beer</td>
+                <td class="name-col">MEGUMINOAME -恵の雨-</td>
+                <td class="region-col">日本/京都</td>
+                <td class="style-col">DH Saison</td>
+                <td class="abv-col">4.0%</td>
+                <td class="vol-col">350ml</td>
+                <td class="desc-col">京都のブルワリー。Brewers GoldやElixirなどのホップでドライホッピングを施したセゾン。ファームハウス酵母の野生味と爽やかな軽快さが特徴。</td>
+                <td class="img-cell"><img src="https://s3-ap-northeast-1.amazonaws.com/public-my-beer-2/uploads/beer/image/23583/20ce67d1-f015-411a-8ef1-590ef89d67ed.jpg" alt="MEGUMINOAME" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">2</td>
+                <td class="brewery-col">Bellwoods Brewery</td>
+                <td class="name-col">Omerta</td>
+                <td class="region-col">カナダ</td>
+                <td class="style-col">Pale Ale</td>
+                <td class="abv-col">5.0%</td>
+                <td class="vol-col">473ml</td>
+                <td class="desc-col">トロントの超人気ブルワリー。柑橘系の爽やかな香りと、ドリンカビリティの高さが際立つ、非常にクリーンなペールエール。</td>
+                <td class="img-cell"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRM04i0jjTsZyvRzWGojR45hgJdZvIy8Xoftg&s" alt="Omerta" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">3</td>
+                <td class="brewery-col">渥美半島醸造</td>
+                <td class="name-col">WANAKA</td>
+                <td class="region-col">日本/愛知</td>
+                <td class="style-col">Modern Gruit</td>
+                <td class="abv-col">5.0%</td>
+                <td class="vol-col">350ml</td>
+                <td class="desc-col">愛知県田原市のブルワリー。ホップの代わりにハーブ等を使用する中世の製法「グルート」を現代的に解釈。飲み疲れしないエレガントな味わい。</td>
+                <td class="img-cell"><img src="https://s3-ap-northeast-1.amazonaws.com/public-my-beer-2/uploads/beer/image/37638/9b47d758-b90c-48fc-80df-851a8d435de6.jpg" alt="WANAKA" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">4</td>
+                <td class="brewery-col">Heavy Riff Brewing</td>
+                <td class="name-col">Petty Wage</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">Farmhouse Ale - Saison</td>
+                <td class="abv-col">5.8%</td>
+                <td class="vol-col">473ml</td>
+                <td class="desc-col">ミズーリ州のブルワリー。パンクバンドSwingin' Uttersの曲名にちなんだクラシックスタイルのセゾン。同社の樽熟成ビールのベースにもなる銘酒。</td>
+                <td class="img-cell"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQe3bZb_zhThs_BVrxO5WKSLY13vR0SJH_3uA&s" alt="Petty Wage" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">5</td>
+                <td class="brewery-col">CRAFT BEER BASE</td>
+                <td class="name-col">leaf</td>
+                <td class="region-col">日本/大阪</td>
+                <td class="style-col">Saison with Sage & Lemongrass</td>
+                <td class="abv-col">6.0%</td>
+                <td class="vol-col">330ml</td>
+                <td class="desc-col">食事に合うよう特別に醸造されたオリジナルビール。セージとレモングラスの清涼感あふれるハーブ香が特徴の爽やかなセゾン。</td>
+                <td class="img-cell"><img src="https://umekita.com/sc/assets/sc/leaf_logo.jpg" alt="leaf" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">6</td>
+                <td class="brewery-col">Brouwerij Verhaeghe</td>
+                <td class="name-col">Duchesse de Bourgogne</td>
+                <td class="region-col">ベルギー</td>
+                <td class="style-col">Flanders Red Ale</td>
+                <td class="abv-col">6.2%</td>
+                <td class="vol-col">750ml</td>
+                <td class="desc-col">「ブルゴーニュ公国女公爵」の名を持つオーク樽熟成のサワーエール。バルサミコ酢やブラックチェリーのような複雑な酸味と甘みの傑作。</td>
+                <td class="img-cell"><img src="https://www.specialtybeer.com/wp-content/uploads/2012/12/Duchesse-De_Bourgogne-750-ml-NEW-450x600-2-1.png" alt="Duchesse de Bourgogne" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">7</td>
+                <td class="brewery-col">Wild East Brewing</td>
+                <td class="name-col">King Of The North</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">Hoppy Amber Ale</td>
+                <td class="abv-col">6.5%</td>
+                <td class="vol-col">473ml</td>
+                <td class="desc-col">NYブルックリン。Chinook、Cascade、Simcoeホップを使用したレッドエール。キャラメルやトフィーの軽い甘みと松や柑橘の苦味が絶妙なバランス。</td>
+                <td class="img-cell"><img src="https://www.arome.jp/upload/save_image/02270114_69a0717519309.jpg" alt="King Of The North" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">8</td>
+                <td class="brewery-col">Bale Breaker</td>
+                <td class="name-col">Top Cutter</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">West Coast IPA</td>
+                <td class="abv-col">6.8%</td>
+                <td class="vol-col">355ml</td>
+                <td class="desc-col">ホップ農家が立ち上げたブルワリーの看板IPA。シムコー、シトラ、モザイク由来の松やグレープフルーツの強烈なアロマが特徴の王道スタイル。</td>
+                <td class="img-cell"><img src="https://bellycraft.jp/html/upload/save_image/0513134001_5ebb7a212f67d.png" alt="Top Cutter" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">9</td>
+                <td class="brewery-col">CRAFT BEER BASE</td>
+                <td class="name-col">MIX JUICY</td>
+                <td class="region-col">日本/大阪</td>
+                <td class="style-col">Hazy IPA</td>
+                <td class="abv-col">7.0%</td>
+                <td class="vol-col">350ml</td>
+                <td class="desc-col">ホップの品種を変えながら展開するシリーズ。名前の通り、大阪名物「ミックスジュース」のようなフルーティーでトロピカルな濁りIPA。</td>
+                <td class="img-cell"><img src="https://images.untp.beer/crop?width=640&height=640&stripmeta=true&url=https://untappd.s3.amazonaws.com/photos/2025_05_09/1a0921dc6e9aa526595f5b507f33ea68_c_1477423814_raw.jpg" alt="MIX JUICY" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">10</td>
+                <td class="brewery-col">Long Beach Beer Lab</td>
+                <td class="name-col">This Is The Way</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">West Coast IPA (DDH)</td>
+                <td class="abv-col">7.2%</td>
+                <td class="vol-col">473ml</td>
+                <td class="desc-col">モザイクとクラッシュホップでダブルドライホップされたウェストコーストIPA。ダンク（松脂のような香り）でビター、そしてクリスプな仕上がり。</td>
+                <td class="img-cell"><img src="https://s3-ap-northeast-1.amazonaws.com/public-my-beer-2/uploads/beer/image/36736/72840182-173d-4a2c-b8a7-6dc96deb9b94.png" alt="This Is The Way" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">11</td>
+                <td class="brewery-col">Schneider Weisse</td>
+                <td class="name-col">TAP6 Mein Aventinus</td>
+                <td class="region-col">ドイツ</td>
+                <td class="style-col">Weizendoppelbock</td>
+                <td class="abv-col">8.2%</td>
+                <td class="vol-col">500ml</td>
+                <td class="desc-col">ヴァイツェンボックの世界的な指標。完熟バナナ、レーズン、プラムのような濃厚な果実のアロマと、クローブのスパイス感が調和する深いコク。</td>
+                <td class="img-cell"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRz75ZMG6fHHsNoexCS4hdlP0Xz2pWg7PvsHw&s" alt="TAP6 Mein Aventinus" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">12</td>
+                <td class="brewery-col">Finback Brewery</td>
+                <td class="name-col">If Whales Could Fly</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">Double Hazy IPA</td>
+                <td class="abv-col">9.0%</td>
+                <td class="vol-col">473ml</td>
+                <td class="desc-col">NYの名門Finback。MeridianとMosaicホップでDDHされたヘイジーDIPA。濃厚なトロピカルフルーツの香りと、度数を感じさせない滑らかさ。</td>
+                <td class="img-cell"><img src="https://halftimebeverage.com/media/catalog/product/cache/5a9ece781d558937ae51db0fc99c94f4/rdi/rdi/if-whales-could-fly-34136_1.png" alt="If Whales Could Fly" class="beer-img"></td>
+            </tr>
+            <tr>
+                <td class="no-col">13</td>
+                <td class="brewery-col">Beachwood Brewing</td>
+                <td class="name-col">Mocha Machine</td>
+                <td class="region-col">アメリカ</td>
+                <td class="style-col">Imperial Chocolate Coffee Porter</td>
+                <td class="abv-col">9.2%</td>
+                <td class="vol-col">355ml</td>
+                <td class="desc-col">専用焙煎のコーヒーとエクアドル産カカオニブを使用した傑作インペリアルポーター。GABFやWorld Beer Cupで金賞に輝く世界的名品。</td>
+                <td class="img-cell"><img src="https://img07.shop-pro.jp/PA01384/703/product/190294236.jpg?cmsp_timestamp=20260208174403" alt="Mocha Machine" class="beer-img"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="imageModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01" alt="Enlarged Image">
+    <div id="caption" class="modal-caption"></div>
+</div>
+
+<script>
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
+    const images = document.querySelectorAll(".beer-img");
+    
+    images.forEach(img => {
+        img.addEventListener("click", function() {
+            modal.style.display = "flex";
+            modalImg.src = this.src;
+            let beerName = "";
+            const row = this.closest("tr");
+            const nameCell = row.querySelector(".name-col");
+            if(nameCell) beerName = nameCell.textContent;
+            captionText.innerHTML = beerName;
+        });
+    });
+    
+    const span = document.getElementsByClassName("close")[0];
+    span.onclick = function() { modal.style.display = "none"; }
+    modal.onclick = function(event) {
+        if (event.target === modal) modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>
